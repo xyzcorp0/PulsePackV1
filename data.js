@@ -51,7 +51,7 @@ Anthony Gordon|AG|GB|Newcastle|PL|80
 Lucas Paquetá|MC|BR|West Ham|PL|82
 Jarrod Bowen|AD|GB|West Ham|PL|81
 Pedro Porro|DD|ES|Tottenham|PL|80
-Kylian Mbappé|BU|FR|Real Madrid|LL|91
+Kylian Mbappé|BU|FR|Real Madrid|LL|99
 Vinícius Júnior|AG|BR|Real Madrid|LL|90
 Jude Bellingham|MOC|GB|Real Madrid|LL|90
 Thibaut Courtois|G|BE|Real Madrid|LL|89
