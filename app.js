@@ -177,10 +177,10 @@ function viewMissions() {
 }
 
 function viewParrainage() {
-  const s = S(), refStats = window.KP_REFERRAL?.stats || {invited:0}, refCode = window.KP_REFERRAL?.code || '', link = location.origin.replace('null', '') + location.pathname + '?ref=' + encodeURIComponent(refCode);
+  const s = S(), refStats = window.KP_REFERRAL?.stats || {invited:0}, refCode = window.KP_REFERRAL?.code || '', link = refCode ? location.origin + location.pathname + '?ref=' + encodeURIComponent(refCode) : ''; 
   return `<div class="hero-ref"><h1>Invite un ami.<br><em>Gagnez tous les deux.</em></h1><p class="lead">Ton ami reçoit 💎 240 à son inscription, et toi 💎 480 pour chaque ami invité.</p>
   <div class="ref-box"><div><b>${refStats.invited}</b><span class="mono">Amis invités</span></div><div><b>${fmt(refStats.invited * 480)}</b><span class="mono">Gemmes gagnées</span></div></div>
-  <div class="linkbox"><input readonly value="${esc(link)}" id="refLink" ${refCode?'':'disabled placeholder="Connecte-toi pour obtenir ton lien"'} aria-label="Ton lien de parrainage"><button class="btn-p" data-act="copy">Copier le lien</button></div>
+  <div class="linkbox"><input readonly value="${esc(link)}" id="refLink" ${refCode?'':'disabled placeholder="Connecte-toi pour obtenir ton lien"'} aria-label="Ton lien de parrainage"><button class="btn-p" data-act="copy" ${refCode?'':'disabled'}>Copier le lien</button></div>
   <p class="mono" style="margin-top:12px">Le parrainage est réservé aux comptes connectés. Les récompenses sont validées par Supabase lors de la création du compte.</p></div>
   <div class="sect-h"><h3>Paliers</h3></div><div class="tiers">${KP.TIERS.map(t => `<div class="tier${refStats.invited >= t.n ? ' ok' : ''}"><div class="ring">${t.n}</div><b>${t.name}</b><small class="mono">${t.gems ? '💎 ' + t.gems : 'Badge'}</small></div>`).join('')}</div>
   <p class="mono">Pour être parrainé, ouvre le lien de ton ami puis crée un nouveau compte. Les comptes existants ne peuvent pas ajouter de parrain.</p>`;
