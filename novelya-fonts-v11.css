@@ -1,0 +1,24 @@
+/* V11 — harmonisation totale des polices PULSEPACK avec Novelya. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root { --font:'Manrope','Inter',system-ui,sans-serif; --mono:'Inter',system-ui,sans-serif; }
+html body,html body :is(button,a,input,select,textarea,small,b,strong,span,label,p,li,nav,div),html body .mono,html body .chip,html body nav a,html body .streak,html body .pack-tile small,html body .pack .pk-top,html body .pack .pk-name,html body .pack-tile .nm,html body .eyebrow,html body .pk-name,html body .pk-top,html body .day,html body .stat-bar b {font-family:'Inter',system-ui,sans-serif!important;}
+html body :is(h1,h2,h3,h4,h5,h6,.logo,.page,.nm,.pk-name,.pack .pk-name,.pack-tile .nm),html body .streak b {font-family:'Manrope','Inter',sans-serif!important;font-weight:800;letter-spacing:-.025em;}
+html body .pack .pk-top{font-weight:800;letter-spacing:.015em;}
+html body .pack .pk-name{font-size:1.16em;line-height:1.08;letter-spacing:-.025em;}
+html body .pack .pk-art{overflow:hidden;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.20),rgba(0,0,0,.18));}
+html body .pack .pk-art .kp-pack-illustration{display:block;width:100%;height:100%;object-fit:cover;filter:drop-shadow(0 5px 10px #0005);border-radius:5px;}
+html body .pack-tile small{letter-spacing:.02em;font-size:.72rem;}
+html body .streak,html body .streak *{letter-spacing:0!important;}
+html body :is(.btn-p,.btn-o,.pack-tile,.chip.btn,.tabs button){font-family:'Inter',system-ui,sans-serif!important;}
+/* Garder les polices saisonnières uniquement sur les titres principaux. */
+html body.halloween h1,html body.halloween .page{font-family:'Pirata One','Inter',serif!important;}
+html body.christmas h1,html body.christmas .page{font-family:'Mountains of Christmas','Inter',serif!important;}
+html body.newyear h1,html body.newyear .page{font-family:'Cinzel','Inter',serif!important;}
+html body.birthday h1,html body.birthday .page{font-family:'Fredoka','Inter',sans-serif!important;}
+html body.easter h1,html body.easter .page{font-family:'Playfair Display',Georgia,serif!important;}
+
+/* V12 : écussons et illustrations sans arrière-plan ni recadrage. */
+html body .pack .pk-art .kp-pack-illustration{object-fit:contain!important;border-radius:0!important;padding:8px;box-sizing:border-box;filter:drop-shadow(0 10px 13px #0008)}
+html body .pack .pk-art .kp-pack-crest{padding:14px;filter:drop-shadow(0 7px 13px #000a)}
+html body .pack .pk-art .kp-pack-legend{padding:10px;filter:drop-shadow(0 6px 12px #0008)}
+html body .pack .pk-art .kp-pack-special{padding:0 6px}

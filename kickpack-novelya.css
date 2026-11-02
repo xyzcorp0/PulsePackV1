@@ -1,0 +1,19 @@
+/* Adaptation des composants originaux Novelya à PULSEPACK. */
+:root{--panel:#10171a;--text:var(--txt);--muted:var(--mut);--accent:var(--acc);--accent-rgb:184,255,58}
+body.halloween{--panel:#1b110d;--accent:#ff8a1f;--accent-rgb:255,138,31}
+body.christmas{--panel:#0b1e1b;--accent:#f4c96b;--accent-rgb:244,201,107}
+body.newyear{--panel:#0d1236;--accent:#f5c75a;--accent-rgb:245,199,90}
+body.birthday{--panel:#27135c;--accent:#ff5fa8;--accent-rgb:255,95,168}
+body.easter{--panel:#2a1a11;--accent:#e8b64c;--accent-rgb:232,182,76}
+.kp-auth-box{max-width:780px!important;border-radius:16px!important;background:var(--panel)!important;border:1px solid var(--line)!important;padding:30px!important}
+.kp-auth-box h2{font-size:28px;margin-bottom:12px}.kp-auth-box h3{margin-top:24px;margin-bottom:12px}
+.kp-theme-controls{display:grid;gap:12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+.kp-theme-controls .nv-select{width:min(100%,400px)}
+.kp-theme-controls label{display:grid;gap:6px;font-size:13px;color:var(--mut)}
+.kp-theme-controls input,.kp-theme-controls textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--txt);padding:12px;font:inherit}
+.kp-theme-controls textarea{resize:vertical;min-height:75px}
+.kp-bday-fields{display:grid;gap:12px}.kp-bday-fields[hidden]{display:none}
+.kp-theme-controls .btn-p{width:max-content}
+.kp-auth-modal .nv-panel{z-index:2147483000}
+.kp-auth-box .nv-btn{color:var(--txt)}
+@media(max-width:600px){.kp-auth-box{padding:20px!important}}

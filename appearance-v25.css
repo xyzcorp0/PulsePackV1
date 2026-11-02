@@ -1,0 +1,10 @@
+
+/* V25 — apparence individuelle, indépendante des thèmes saisonniers */
+html[data-appearance="light"] { color-scheme:light; --bg:#f2f5fa; --bg2:#fff; --line:#d7e0ec; --txt:#172638; --mut:#526579; --acc-ink:#fff; }
+html[data-appearance="light"] body {background:var(--bg);color:var(--txt)}
+html[data-appearance="light"] .top {background:rgba(244,248,253,.96)}
+html[data-appearance="light"] .btn-o,html[data-appearance="light"] .chip,html[data-appearance="light"] .pack-tile {color:var(--txt)}
+html[data-appearance="light"] input,html[data-appearance="light"] select,html[data-appearance="light"] textarea {background:#fff;color:#172638;border-color:#bdcce0}
+html[data-appearance="light"] .modal,html[data-appearance="light"] .modal-content {color:var(--txt)}
+.kp-password-warning {margin:12px 0 0;padding:11px 13px;border:1px solid #e5a23e;border-radius:10px;background:rgba(220,143,36,.10);font-size:.91rem}
+.kp-password-warning strong {font-weight:850}

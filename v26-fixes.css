@@ -1,0 +1,7 @@
+/* V26 — confirmation Owner et logos de packs haute définition */
+.kp-delete-overlay{position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.84);display:grid;place-items:center;padding:20px;box-sizing:border-box;backdrop-filter:blur(7px)}
+.kp-delete-dialog{width:min(100%,490px);box-sizing:border-box;background:#111720;border:2px solid #ed4457;border-radius:18px;padding:28px;text-align:center;box-shadow:0 24px 90px #000c;color:#f7f8fc;font-family:inherit}
+.kp-delete-icon{font-size:46px;color:#ff5e6c}.kp-delete-dialog h2{font-size:23px;color:#ff5e6c;margin:8px 0 16px}.kp-delete-dialog p{line-height:1.5}.kp-delete-warning{background:#3b141d;border:1px solid #f24d5f;border-radius:10px;padding:12px;color:#ffe1e4}
+.kp-delete-dialog input{width:100%;box-sizing:border-box;background:#0a111b;color:white;border:1px solid #397ef6;border-radius:10px;padding:13px;font:inherit;outline-offset:3px}.kp-delete-dialog input:focus{outline:2px solid #3289ff}
+.kp-delete-actions{display:flex;gap:10px;margin-top:20px}.kp-delete-actions button{flex:1;padding:12px 10px;border-radius:10px;border:1px solid #576375;background:#242d3a;color:white;font:inherit;font-weight:700;cursor:pointer}.kp-delete-actions #kpDeleteYes{background:#c82940;border-color:#f05b69}.kp-delete-actions #kpDeleteYes:disabled{opacity:.4;cursor:not-allowed}
+.kp-league-local{width:85%!important;height:85%!important;object-fit:contain!important;image-rendering:auto;filter:drop-shadow(0 5px 12px #0005)}

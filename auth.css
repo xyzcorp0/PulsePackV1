@@ -1,0 +1,15 @@
+/* Adaptation des saisons Novelya à PULSEPACK */
+.top{position:sticky}.topbar{position:relative}.hero{position:absolute;top:60px;left:0;right:0;height:520px;z-index:0;pointer-events:none;overflow:hidden}main{position:relative;z-index:1}.kp-account{display:flex;gap:6px;align-items:center}.kp-role{font-size:11px;color:var(--mut);max-width:180px;overflow:hidden;text-overflow:ellipsis}.kp-account .btn-o,.kp-account .btn-p{font-size:12px;padding:8px}.kp-auth-modal{position:fixed;inset:0;z-index:100;background:#000b;display:grid;place-items:center;padding:16px}.kp-auth-modal[hidden]{display:none}.kp-auth-box{background:#10181b;border:1px solid #52636b;border-radius:14px;padding:26px;width:min(600px,100%);max-height:90vh;overflow:auto;position:relative}.kp-auth-box h2,.kp-auth-box h3{margin:8px 0 15px}.kp-auth-box h3{margin-top:24px}.kp-auth-box form{display:grid;gap:12px}.kp-auth-box .x{position:absolute;right:12px;top:12px}.kp-member{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #344;padding:10px 0;font-size:12px;word-break:break-word}.kp-member button{flex-shrink:0}#kpAuthNotice{color:#ffcb70}.top{flex-wrap:wrap}body.halloween{--acc:#ff8a1f}body.christmas{--acc:#f4c96b}body.newyear{--acc:#8bc8ff}body.birthday{--acc:#ff9ac8}body.easter{--acc:#a3e8a5}body.halloween .top,body.christmas .top{background:var(--bg2)}@media(max-width:900px){.kp-account{width:100%;justify-content:flex-end}.kp-role{max-width:140px}}
+/* V13 — Gestion des collections */
+.kp-collection-admin{border:1px solid #4c6471;border-radius:18px;padding:18px;margin-top:24px;background:linear-gradient(140deg,#17242b,#0d1419)}
+.kp-collection-admin label{display:grid;gap:7px;margin:12px 0;font-weight:650;font-size:13px}
+.kp-collection-admin input,.kp-collection-admin select{width:100%;box-sizing:border-box;background:#0c151a;border:1px solid #49616a;color:#fff;border-radius:10px;padding:10px;font:inherit}
+.kp-collection-admin select{min-height:125px}
+.kp-admin-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:15px}
+.kp-admin-actions button{min-height:42px;white-space:normal}
+.kp-admin-actions .kp-danger{border-color:#ef6978;color:#ffc2c9}
+#kpCollectionResult{margin-top:12px;line-height:1.5;color:#c9f4d5}
+@media(max-width:450px){.kp-admin-actions{grid-template-columns:1fr}}
+
+/* V47 : invitation discrète visible uniquement avant connexion. */
+.kp-welcome-promo{display:flex;flex-direction:column;align-items:flex-end;gap:4px;max-width:245px}.kp-welcome-text{font-size:10px;line-height:1.25;color:var(--mut,#9ca8b5);text-align:right}.kp-welcome-text b{color:#a8d8ff;font-weight:750}@media(max-width:640px){.kp-welcome-promo{max-width:210px}.kp-welcome-text{font-size:9px}}

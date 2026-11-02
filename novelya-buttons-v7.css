@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;750;800&family=Manrope:wght@500;600;700;800&display=swap');
+/* V7 — Typographie Novelya. Les polices spéciales des fêtes restent gérées par seasons.css. */
+html body, html body button, html body input, html body select, html body textarea, html body .tabs button {font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;}
+html body .logo, html body .modal-box h2, html body .modal-box h3, html body .kp-auth-box h2, html body .kp-auth-box h3, html body .page, html body .sect-h h3 {font-family:'Manrope','Inter',sans-serif;font-weight:800;letter-spacing:-.035em;}
+/* On conserve les titres décoratifs d'Halloween, Noël, etc. */
+html body.halloween h1,html body.halloween .page{font-family:'Pirata One','Inter',serif;}
+html body.christmas h1,html body.christmas .page{font-family:'Mountains of Christmas','Inter',serif;}
+html body.newyear h1,html body.newyear .page{font-family:'Cinzel','Inter',serif;}
+html body.birthday h1,html body.birthday .page{font-family:'Fredoka','Inter',sans-serif;}
+html body.easter h1,html body.easter .page{font-family:'Playfair Display',Georgia,serif;}
+/* Boutons d'action harmonisés à Novelya, sans forcer la couleur du thème. */
+html body .btn-p,html body .btn-o,html body .chip.btn,html body .tabs button,html body .x,html body .kp-member button {font-family:'Inter',system-ui,sans-serif;font-size:13px;font-weight:750;letter-spacing:-.015em;text-transform:none;border-radius:11px;min-height:42px;padding:11px 18px;display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,filter .18s ease,background-color .18s ease;}
+html body .btn-p {box-shadow:0 7px 25px color-mix(in srgb,var(--acc) 22%,transparent);}
+html body .btn-o {border-color:color-mix(in srgb,var(--acc) 28%,var(--line));box-shadow:0 5px 15px #0002;}
+html body .btn-p:hover:not(:disabled),html body .btn-o:hover:not(:disabled),html body .chip.btn:hover:not(:disabled),html body .kp-member button:hover:not(:disabled) {transform:translateY(-2px);filter:brightness(1.09);box-shadow:0 10px 25px color-mix(in srgb,var(--acc) 20%,transparent);border-color:var(--acc);}
+html body .btn-p:active:not(:disabled),html body .btn-o:active:not(:disabled),html body .chip.btn:active:not(:disabled){transform:translateY(0) scale(.98);}
+html body button:focus-visible{outline:2px solid var(--acc);outline-offset:3px;}
+html body button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;}
+/* La barre d'ouverture garde son format compact. */
+html body .opener .btn-p{flex-direction:column;gap:2px;font-size:16px;padding:9px 22px;}
+html body .opener .btn-p small{font-size:10px;}
+/* Fenêtres et champs : cohérence avec Novelya. */
+html body .kp-auth-box,html body .modal-box{box-shadow:0 24px 70px #0007;}
+html body .kp-auth-box input:not([type=checkbox]):not([type=file]),html body .kp-auth-box textarea,html body .modal-box input:not([type=checkbox]):not([type=file]),html body .modal-box select{border-radius:11px;transition:border-color .2s,box-shadow .2s;}
+html body .kp-auth-box input:focus,html body .kp-auth-box textarea:focus,html body .modal-box input:focus{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 15%,transparent);}
+@media(max-width:600px){html body .btn-p,html body .btn-o{padding:10px 13px;font-size:12px;}}
+
+/* V7.2 : le panneau Compte/Admin utilise kpAuthModal, pas #modal. */
+html body #kpAuthModal:not([hidden]) { z-index: 5000 !important; }
+html body #modal:not([hidden]) { z-index: 5000 !important; }
+html body #bdayBanner { z-index: 120; }
+
+/* V7.3 : la bannière occupe une vraie ligne au-dessus de la navigation, comme Novelya. */
+html body #bdayBanner { position:relative; z-index:20; width:100%; box-sizing:border-box; }
+html body .top { position:sticky; top:0; }
+html body #kpAuthModal:not([hidden]),html body #modal:not([hidden]) { z-index:5000!important; }
+
+/* V9 — Harmonisation des éléments réellement cliquables, sans changer leur couleur. */
+html body :is(button, .pack-tile, .pk-wrap, [role="button"], .nav a, .card[data-act], input[type="file"]){
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .18s ease, box-shadow .2s ease, border-color .2s ease, filter .18s ease, background-color .18s ease;
+}
+html body :is(button, .pack-tile, .pk-wrap, [role="button"], .nav a):not(:disabled):hover{filter:brightness(1.09)}
+html body :is(button, .pack-tile, .pk-wrap, [role="button"], .nav a):focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+html body :is(.btn-p,.btn-o,.x,.qty button,.tabs button,.chip,.kp-member button,.pack-tile){border-radius:12px}
+html body :is(.btn-p,.btn-o,.qty button,.tabs button,.chip,.kp-member button):not(:disabled):active{transform:scale(.97)}
+html body :is(.btn-p,.btn-o,.qty button,.tabs button,.chip,.kp-member button):not(:disabled):hover{box-shadow:0 9px 24px rgba(0,0,0,.24),0 0 0 1px color-mix(in srgb,var(--acc) 25%,transparent)}
+html body :is(button,select,input,textarea){font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif}
+html body :is(h1,h2,h3,.logo,.page,.pk-name,.pack-tile .nm){font-family:'Manrope','Inter',sans-serif}
+/* Les polices spéciales saisonnières priment sur la typographie standard. */
+html body.birthday :is(h1,.page){font-family:'Fredoka','Inter',sans-serif}
+html body.halloween :is(h1,.page){font-family:'Pirata One',serif}
+html body.christmas :is(h1,.page){font-family:'Mountains of Christmas',serif}
+html body.newyear :is(h1,.page){font-family:'Cinzel',serif}
+html body.easter :is(h1,.page){font-family:'Playfair Display',serif}
+/* Écussons : fond transparent, dimensions cohérentes sur toutes les cartes. */
+html body .kp-crest-img,html body .kp-league-img{object-fit:contain;background:transparent!important;border:0!important;box-shadow:none!important}
+html body .kp-legend-crest{object-fit:contain;background:transparent!important;filter:none!important}
+@media(prefers-reduced-motion:reduce){html body :is(button,.pack-tile,.pk-wrap,[role="button"]){transition:none!important}}

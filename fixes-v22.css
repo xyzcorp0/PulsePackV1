@@ -1,0 +1,21 @@
+/* V22 — Champ motif de sanction : même apparence que le champ pseudo. */
+html body #kpModReason {
+  display:block; width:100%; min-height:96px; box-sizing:border-box;
+  background:var(--bg2,#10151b)!important;
+  color:var(--txt,#f5f7fa)!important;
+  border:1px solid var(--line,#303b48)!important;
+  border-radius:11px!important;
+  padding:12px 14px!important;
+  font:inherit!important;
+  resize:vertical;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  color-scheme:dark;
+}
+html body #kpModReason::placeholder{color:var(--mut,#8997a7);opacity:1}
+html body #kpModReason:focus{border-color:var(--acc,#259fff)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--acc,#259fff) 20%,transparent)!important}
+/* Tous les packs en vedette ont exactement la même largeur, y compris Joueur du jour. */
+html body .fav{align-items:stretch}
+html body .fav>.pack-tile{flex:0 0 174px;width:174px;min-width:174px;max-width:174px;box-sizing:border-box;align-self:stretch}
+html body .fav>.pack-tile>.pack{display:block;width:100%;flex:none;aspect-ratio:5/7.4;box-sizing:border-box}
+html body .fav>.pack-tile>.pack .pk-art{box-sizing:border-box}
