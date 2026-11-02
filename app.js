@@ -159,10 +159,26 @@ function viewMarche() {
   return `<section class="pm-market"><div class="pm-head"><div><div class="pm-kicker">PULSEPACK · TRANSFERTS</div><h1>MARCHÉ <span>DES CARTES</span></h1><p>Achète et vends des cartes entre vrais comptes.</p></div><button class="pm-sell-button" data-act="marketSellOpen">+ VENDRE UNE CARTE</button></div><div class="pm-notice">🪙 Solde marché : <b>${feed.coins===null?'Connecte-toi':fmt(feed.coins)}</b> · Commission de 5 % sur chaque vente.</div><div class="pm-tabs">${tabs.map(([k,l])=>`<button class="${ui.mt===k?'active':''}" data-act="mt" data-id="${k}">${l}</button>`).join('')}</div>${body}</section>`;
 }
 function marketDetail(pid){const p=KP.BYID[pid];if(p)detail(pid);}
-function marketSellOpen(){
+function marketSellOpen(pid=''){
  const cards=KP.S.cards.filter(c=>KP.BYID[c.pid]);
- modal(`<h2>Vendre une carte</h2><p>La carte sera retirée de ta collection jusqu’à sa vente ou l’annulation de l’annonce.</p><select id="marketCard" style="width:100%;margin:12px 0">${cards.map(c=>`<option value="${esc(c.id)}">${esc(KP.BYID[c.pid].name)} · ${KP.BYID[c.pid].rating} · N°${esc(c.serial||'?')}</option>`).join('')}</select><input type="number" id="marketPrice" min="1" max="1000000000" placeholder="Prix en crédits" style="width:100%;margin:12px 0"><button class="btn-p" data-act="marketConfirmSell" ${cards.length?'':'disabled'}>Publier mon annonce</button>`);
+ const chosen=cards.find(c=>c.pid===pid)||cards[0];
+ modal(`<h2>Vendre une carte</h2><p>Recherche une carte de ta collection, puis choisis son prix. La vente est validée par Supabase.</p>
+ <input type="search" id="marketCardSearch" placeholder="Rechercher un joueur ou un club…" value="${esc(pid&&KP.BYID[pid]?.name||'')}" style="width:100%;margin:12px 0" aria-label="Rechercher une carte à vendre">
+ <select id="marketCard" style="width:100%;margin:12px 0" aria-label="Choisir une carte">${cards.map(c=>`<option value="${esc(c.id)}" ${c.id===chosen?.id?'selected':''}>${esc(KP.BYID[c.pid].name)} · ${KP.BYID[c.pid].rating} · N°${esc(c.serial||'?')}</option>`).join('')}</select>
+ <div id="marketSearchEmpty" class="mono" hidden>Aucune carte possédée ne correspond à ta recherche.</div>
+ <input type="number" id="marketPrice" min="1" max="1000000000" placeholder="Prix en crédits" style="width:100%;margin:12px 0">
+ <button class="btn-p" data-act="marketConfirmSell" ${cards.length?'':'disabled'}>Publier mon annonce</button>`);
+ const input=$('#marketCardSearch'),select=$('#marketCard');
+ input?.addEventListener('input',()=>{
+  const q=input.value.trim().toLocaleLowerCase('fr');let visible=0;
+  for(const option of select.options){const c=cards.find(c=>c.id===option.value),p=c&&KP.BYID[c.pid];const ok=!!p&&`${p.name} ${p.club} ${p.rating}`.toLocaleLowerCase('fr').includes(q);option.hidden=!ok;option.disabled=!ok;if(ok)visible++;}
+  const first=[...select.options].find(o=>!o.disabled);select.value=first?.value||'';
+  $('#marketSearchEmpty').hidden=visible>0;
+  $('[data-act="marketConfirmSell"]', $('#modalBody')).disabled=!visible;
+ });
 }
+function marketClient(){const m=window.KP_MARKET;if(!m||typeof m.sell!=='function')throw Error('Marché non chargé. Vérifie pulse-market-v62.js et actualise la page.');return m;}
+
 async function marketAction(work,success){try{await work();toast(success);closeModal();render(true);}catch(e){toast(e.message||'Erreur marché');}}
 
 function viewClassement() {
@@ -262,9 +278,9 @@ function detail(pid) {
   const s = S(), mine = s.cards.filter(c => c.pid === pid), dup = KP.duplicates().filter(c => c.pid === pid), wished = s.wish.includes(pid);
   modal(`<div class="detail"><div>${cardHTML(p, { cls: 'xl', serial: mine[0]?.serial, off: !mine.length })}</div><div><h2 style="font-size:2.2rem">${esc(p.name)}</h2>
   <div class="kv"><span>Poste</span><b>${KP.POS[p.pos] || p.pos}</b><span>Club</span><b>${esc(p.club)}</b><span>Nation</span><b>${countryHTML(p.nation)} ${esc(p.nation)}</b><span>Ligue</span><b>${KP.LEAGUES[p.league] || p.league}</b><span>Note</span><b>${p.rating}</b><span>Rareté</span><b class="rr-${p.rarity}">${KP.RLABEL[p.rarity]}</b><span>Valeur</span><b>🪙 ${fmt(p.value)}</b><span>Exemplaires</span><b>${mine.length}</b></div>
-  <div class="row"><button class="btn-o" data-act="wish" data-pid="${esc(pid)}">${wished ? '★ Dans mes souhaits' : '☆ Ajouter aux souhaits'}</button>
+  <div class="row">${mine.length ? `<button class="btn-p" data-act="marketSellCard" data-pid="${esc(pid)}">🪙 Vendre</button>` : `<button class="btn-o" data-act="wish" data-pid="${esc(pid)}">${wished ? '★ Dans mes souhaits' : '☆ Ajouter aux souhaits'}</button>`}
   ${dup.length ? `<button class="btn-o" data-act="recycle1" data-id="${dup[0].id}">Recycler un doublon (🪙 ${KP.recycleValue(p)})</button>` : ''}</div>
-  ${mine.length ? `<p class="mono" style="margin-top:14px">Vente publique désactivée jusqu’au marché entre vrais comptes.</p>` : '<p class="mono" style="margin-top:14px">Tu ne possèdes pas encore cette carte.</p>'}</div></div>`);
+  ${!mine.length ? '<p class="mono" style="margin-top:14px">Tu ne possèdes pas encore cette carte.</p>' : ''}</div></div>`);
 }
 function settings() {
   const s = S();
@@ -344,13 +360,14 @@ const ACT = {
   sell: d => { if(window.KP_showBanWarning?.('market'))return; const price = +$('#sellPrice').value; if (run(() => KP.listCard(d.id, price)) !== null) { toast('Carte mise en vente'); closeModal(); render(true); } },
   unlist: d => { if(window.KP_showBanWarning?.('market'))return; KP.cancelListing(d.id); toast('Annonce retirée'); render(true); },
   buy: d => { if(window.KP_showBanWarning?.('market'))return; const c = run(() => KP.buy(d.id)); if (c) { toast('Carte achetée !'); render(true); } },
-  mt: d => { ui.mt = d.id; render(true); window.KP_MARKET?.refresh().then(()=>render(true)).catch(()=>{}); },
+  mt: d => { ui.mt = d.id; render(true); window.KP_MARKET?.refresh?.().then(()=>render(true)).catch(e=>toast(e.message)); },
   marketDetail: d => marketDetail(d.pid),
   marketInfo: () => marketSellOpen(),
   marketSellOpen: () => marketSellOpen(),
-  marketConfirmSell: () => {const id=$('#marketCard')?.value,price=Number($('#marketPrice')?.value);if(!id||!Number.isInteger(price)||price<1)return toast('Choisis une carte et un prix valide');marketAction(()=>window.KP_MARKET.sell(id,price),'Carte mise en vente !');},
-  marketBuy: d => {if(!confirm('Acheter cette carte avec tes crédits ?'))return;marketAction(()=>window.KP_MARKET.buy(d.id),'Carte achetée !');},
-  marketCancel: d => marketAction(()=>window.KP_MARKET.cancel(d.id),'Annonce retirée !'),
+  marketSellCard: d => marketSellOpen(d.pid),
+  marketConfirmSell: () => {const id=$('#marketCard')?.value,price=Number($('#marketPrice')?.value);if(!id||!Number.isInteger(price)||price<1)return toast('Choisis une carte et un prix valide');marketAction(()=>marketClient().sell(id,price),'Carte mise en vente !');},
+  marketBuy: d => {if(!confirm('Acheter cette carte avec tes crédits ?'))return;marketAction(()=>marketClient().buy(d.id),'Carte achetée !');},
+  marketCancel: d => marketAction(()=>marketClient().cancel(d.id),'Annonce retirée !'),
   lb: d => { ui.lb = d.id; render(true); },
   login: () => { const r = run(() => KP.claimLogin()); if (r) { toast('Récompense récupérée'); render(true); } },
   claim: d => { KP.claimMission(d.id); render(true); },
