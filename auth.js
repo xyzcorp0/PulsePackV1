@@ -16,7 +16,12 @@ const technicalEmail=s=>`${username(s)}@users.kickpack.app`;
 function apply(t){theme=THEMES.includes(t)?t:'normal';document.body.classList.remove(...THEMES.filter(x=>x!=='normal'));if(theme!=='normal')document.body.classList.add(theme);document.documentElement.dataset.theme=theme;renderBirthday();}
 function renderBirthday(){const box=$('#bdayBanner');if(!box)return;const k=birthdayName+'|'+birthdayMessage;let closed=false;try{closed=sessionStorage.getItem('kp-bday-closed')===k;}catch(e){}box.hidden=theme!=='birthday'||!(birthdayName||birthdayMessage)||closed;if(!box.hidden){$('#bdayTitle').textContent=birthdayName?'Joyeux anniversaire '+birthdayName+' !':birthdayMessage;$('#bdayMsg').textContent=birthdayName?birthdayMessage:'';}}
 
-async function loadTheme(){if(!client)return;const {data,error}=await client.from('kp_site_settings').select('theme,birthday_name,birthday_message').eq('id',1).single();if(!error&&data){birthdayName=data.birthday_name||'';birthdayMessage=data.birthday_message||'';apply(data.theme);}}
+async function loadTheme(){
+ if(!client)return;
+ const {data,error}=await client.from('kp_site_settings').select('theme,birthday_name,birthday_message').eq('id',1).single();
+ if(error){console.warn('PULSEPACK: lecture du thème public impossible (vérifier la migration SQL V57)',error);return;}
+ if(data){birthdayName=data.birthday_name||'';birthdayMessage=data.birthday_message||'';apply(data.theme);}
+}
 function render(){const el=$('#kpAccount');if(!el)return;el.innerHTML=!client?'<span class="kp-role">Démo locale · configurer Supabase</span>':user?`<span class="kp-role">${safe(pseudo||'Joueur')} · ${safe(role)}</span><button id="kpLogout" class="btn-o">Déconnexion</button><button id="kpAccountOpen" class="btn-o">${role==='owner'?'Owner':role==='admin'?'Admin':'Compte'}</button>`:'<div class="kp-welcome-promo"><button id="kpAccountOpen" class="btn-p">Connexion / inscription</button><span class="kp-welcome-text">🎁 Nouveau ? <b>1 000 💎 + 10 packs offerts</b> à ta première connexion !</span></div>';}
 // V34: aucune requête momentanément échouée ne doit transformer un compte connecté en invité.
 let refreshSequence=0;
@@ -144,7 +149,11 @@ async function modAction(action){
  catch(err){out.textContent='Erreur : '+err.message;}
 }
 document.addEventListener('click',e=>{const map={kpModBan:'ban',kpModUnban:'unban',kpModInspect:'inspect',kpModDelete:'delete'};if(map[e.target.id])modAction(map[e.target.id]);});
-if(client){client.auth.onAuthStateChange((event)=>{if(['SIGNED_IN','SIGNED_OUT','USER_UPDATED','INITIAL_SESSION'].includes(event))setTimeout(()=>refresh(event==='SIGNED_OUT'),0);});refresh();setInterval(()=>loadTheme().catch(()=>{}),15000);}else render();
+if(client){
+// V57 : le thème global doit être chargé pour les visiteurs anonymes,
+// indépendamment de la session et des appels au profil utilisateur.
+loadTheme().catch(err=>console.warn('PULSEPACK: thème public',err));
+client.auth.onAuthStateChange((event)=>{if(['SIGNED_IN','SIGNED_OUT','USER_UPDATED','INITIAL_SESSION'].includes(event))setTimeout(()=>refresh(event==='SIGNED_OUT'),0);});refresh();setInterval(()=>loadTheme().catch(()=>{}),15000);}else render();
 window.KP_AUTH={get userId(){return user?.id||null},get role(){return role},get pseudo(){return pseudo},get theme(){return theme},apply,refresh};
 })();
 
