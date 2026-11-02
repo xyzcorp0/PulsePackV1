@@ -202,9 +202,9 @@ function leaderboard(mode) {
 /* ---------- parrainage ---------- */
 const TIERS = [{ n: 1, name: 'Remplaçant', gems: 0 }, { n: 3, name: 'Titulaire', gems: 600 }, { n: 5, name: 'Capitaine', gems: 1000 }, { n: 10, name: 'Ballon d’Or', gems: 2000 }, { n: 25, name: 'Légende', gems: 0 }];
 function applyReferral(code) {
-  if (!code || S.refBy || code === S.refCode) return false; S.refBy = code; S.gems += 240; save(); return true;
+  return false; // V58 : jamais de crédit local pour un parrainage
 }
-function simulateInvite() { S.invited++; S.gems += 480; save(); }
+function simulateInvite() { return false; } // V58 : simulation désactivée
 
 /* ---------- divers ---------- */
 function setPseudo(p) { p = (p || '').trim().slice(0, 24); if (p.length < 3) throw new Error('3 caractères minimum'); S.pseudo = p; S.refCode = slug(p) + (S.refCode.match(/\d+$/) || ['1'])[0]; save(); }
