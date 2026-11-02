@@ -4,6 +4,7 @@
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmt = n => Math.round(n).toLocaleString('fr-FR');
+const creditIcon = '<svg class="kp-credit-icon" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><defs><linearGradient id="kpCoinGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff4ad"/><stop offset=".26" stop-color="#f5cc51"/><stop offset=".6" stop-color="#bb7b0b"/><stop offset="1" stop-color="#ffe37d"/></linearGradient><linearGradient id="kpCoinBlack" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#34363b"/><stop offset="1" stop-color="#0d0e12"/></linearGradient></defs><ellipse cx="21" cy="22" rx="16" ry="16" fill="#6f4609" opacity=".6"/><circle cx="19" cy="19" r="17" fill="url(#kpCoinGold)" stroke="#ffe8a1" stroke-width="1.2"/><circle cx="19" cy="19" r="13.5" fill="url(#kpCoinBlack)" stroke="#8c661d" stroke-width="1.1"/><circle cx="19" cy="19" r="11.4" fill="none" stroke="#f6c956" stroke-width=".9"/><path d="M13 19h12M19 13v12" stroke="#ffe38a" stroke-width="2.6" stroke-linecap="round"/><path d="M8.5 19l1.4-1.4 1.4 1.4-1.4 1.4zm18.2 0l1.4-1.4 1.4 1.4-1.4 1.4z" fill="#ffeaa1"/></svg>';
 const KP = window.KP;
 const S = () => KP.S;
 const RORDER = KP.RARITIES;
@@ -132,7 +133,7 @@ function viewClasseur() {
   <select data-f="show" aria-label="Affichage">${opt('all', f.show, 'Tout')}${opt('owned', f.show, 'Possédées')}${opt('missing', f.show, 'Manquantes')}${opt('wish', f.show, 'Souhaits')}</select></div>
   <div class="cards" id="kpClasseurCards">${list.slice(0, ui.limit).map(p => cardHTML(p, { pid: true, off: !counts[p.id], n: counts[p.id], serial: serial[p.id] })).join('') || '<div class="empty">Aucun joueur ne correspond.</div>'}</div>
   ${list.length > ui.limit ? `<div id="kpClasseurSentinel" aria-label="Chargement automatique des joueurs" style="height:12px;margin:14px 0"></div>` : ''}
-  <div class="sect-h"><h3>Doublons</h3></div><div class="countdown"><div>${dup.length ? `<b>${dup.length}</b> doublon${dup.length > 1 ? 's' : ''} · recyclage = <span class="pill">🪙 ${fmt(gain)}</span>` : 'Aucun doublon pour l’instant.'}</div><div class="row">
+  <div class="sect-h"><h3>Doublons</h3></div><div class="countdown"><div>${dup.length ? `<b>${dup.length}</b> doublon${dup.length > 1 ? 's' : ''} · recyclage = <span class="pill">${creditIcon} ${fmt(gain)}</span>` : 'Aucun doublon pour l’instant.'}</div><div class="row">
   <button class="btn-o" data-act="recycleAll" ${dup.length ? '' : 'disabled'}>Tout recycler</button>
   <select data-f="fuse" aria-label="Rareté à fusionner">${RORDER.slice(0, 3).map(r => opt(r, ui.fuse, `${KP.RLABEL[r]} (${dupOf(r)})`)).join('')}</select><button class="btn-o" data-act="fuse" ${dupOf(ui.fuse) >= 5 ? '' : 'disabled'}>Fusionner 5 → 1 rareté sup.</button></div></div>`;
 }
@@ -144,7 +145,7 @@ function viewMarche() {
   const tabs=[['buy','Explorer'],['sell','Mes ventes'],['hist','Mes achats'],['trade','Échanges']];
   const q=ui.mq.trim().toLocaleLowerCase('fr');
   const getp=x=>KP.BYID[x.pid];
-  const listingRow=(x,mine=false)=>{const p=getp(x);if(!p)return '';return `<div class="pm-result"><span class="pm-rating">${p.rating}</span><span class="pm-player"><strong>${esc(p.name)}</strong><small>${esc(p.club)} · ${esc(x.seller||'')} · ${esc(KP.RLABEL[p.rarity])}</small></span><span class="pm-value">🪙 ${fmt(x.price)}</span>${mine&&x.status==='active'?`<button class="btn-o" data-act="marketCancel" data-id="${esc(x.id)}">Retirer</button>`:(!mine?`<button class="btn-p" data-act="marketBuy" data-id="${esc(x.id)}">Acheter</button>`:`<small>${esc(x.status)}</small>`)}</div>`};
+  const listingRow=(x,mine=false)=>{const p=getp(x);if(!p)return '';return `<div class="pm-result"><span class="pm-rating">${p.rating}</span><span class="pm-player"><strong>${esc(p.name)}</strong><small>${esc(p.club)} · ${esc(x.seller||'')} · ${esc(KP.RLABEL[p.rarity])}</small></span><span class="pm-value">${creditIcon} ${fmt(x.price)}</span>${mine&&x.status==='active'?`<button class="btn-o" data-act="marketCancel" data-id="${esc(x.id)}">Retirer</button>`:(!mine?`<button class="btn-p" data-act="marketBuy" data-id="${esc(x.id)}">Acheter</button>`:`<small>${esc(x.status)}</small>`)}</div>`};
   let body='';
   if(ui.mt==='buy'){
     const matches=(feed.listings||[]).filter(x=>{const p=getp(x);return p&&(!q||`${p.name} ${p.club}`.toLocaleLowerCase('fr').includes(q))&&(!ui.marketRar||p.rarity===ui.marketRar)&&(!ui.marketLeague||p.league===ui.marketLeague)});
@@ -156,7 +157,7 @@ function viewMarche() {
   }else{
     body='<div class="pm-empty"><h3>Échanges entre amis</h3><p>Les échanges existants restent accessibles dans la section Social.</p><a class="btn-o" href="#social">Voir les échanges</a></div>';
   }
-  return `<section class="pm-market"><div class="pm-head"><div><div class="pm-kicker">PULSEPACK · TRANSFERTS</div><h1>MARCHÉ <span>DES CARTES</span></h1><p>Achète et vends des cartes entre vrais comptes.</p></div><button class="pm-sell-button" data-act="marketSellOpen">+ VENDRE UNE CARTE</button></div><div class="pm-notice">🪙 Solde marché : <b>${feed.coins===null?'Connecte-toi':fmt(feed.coins)}</b> · Commission de 5 % sur chaque vente.</div><div class="pm-tabs">${tabs.map(([k,l])=>`<button class="${ui.mt===k?'active':''}" data-act="mt" data-id="${k}">${l}</button>`).join('')}</div>${body}</section>`;
+  return `<section class="pm-market"><div class="pm-head"><div><div class="pm-kicker">PULSEPACK · TRANSFERTS</div><h1>MARCHÉ <span>DES CARTES</span></h1><p>Achète et vends des cartes entre vrais comptes.</p></div><button class="pm-sell-button" data-act="marketSellOpen">+ VENDRE UNE CARTE</button></div><div class="pm-notice">${creditIcon} Solde marché : <b>${feed.coins===null?'Connecte-toi':fmt(feed.coins)}</b> · Commission de 5 % sur chaque vente.</div><div class="pm-tabs">${tabs.map(([k,l])=>`<button class="${ui.mt===k?'active':''}" data-act="mt" data-id="${k}">${l}</button>`).join('')}</div>${body}</section>`;
 }
 function marketDetail(pid){const p=KP.BYID[pid];if(p)detail(pid);}
 function marketSellOpen(pid=''){
@@ -193,7 +194,7 @@ function viewClassement() {
 
 function viewMissions() {
   const s = S(), st = KP.loginState(), done = st.can ? st.streak % 7 : ((s.streak - 1) % 7) + 1;
-  const rw = r => [r.g ? '💎 ' + r.g : '', r.c ? '🪙 ' + r.c : '', r.f ? '+' + r.f + ' gratuit' : ''].filter(Boolean).join(' ');
+  const rw = r => [r.g ? '💎 ' + r.g : '', r.c ? `${creditIcon} ` + r.c : '', r.f ? '+' + r.f + ' gratuit' : ''].filter(Boolean).join(' ');
   const reach = KP.MISSIONS.filter(m => !s.claimed[m.id] && s.stats[m.stat] >= m.goal).length;
   return `<h1 class="page">Missions</h1><p class="lead">Reviens chaque jour : plus ta série est longue, plus la récompense grandit.</p>
   <div class="countdown"><div class="row"><span class="flame">🔥</span><div><b style="font:800 1.6rem var(--font)">${st.streak} jour${st.streak > 1 ? 's' : ''} de suite</b><div class="mono">Série de connexion</div></div></div><button class="btn-p" data-act="login" ${st.can ? '' : 'disabled'}>${st.can ? 'Récupérer aujourd’hui' : 'Déjà récupéré'}</button></div>
@@ -277,9 +278,9 @@ function detail(pid) {
   const p = KP.BYID[pid]; if (!p) return;
   const s = S(), mine = s.cards.filter(c => c.pid === pid), dup = KP.duplicates().filter(c => c.pid === pid), wished = s.wish.includes(pid);
   modal(`<div class="detail"><div>${cardHTML(p, { cls: 'xl', serial: mine[0]?.serial, off: !mine.length })}</div><div><h2 style="font-size:2.2rem">${esc(p.name)}</h2>
-  <div class="kv"><span>Poste</span><b>${KP.POS[p.pos] || p.pos}</b><span>Club</span><b>${esc(p.club)}</b><span>Nation</span><b>${countryHTML(p.nation)} ${esc(p.nation)}</b><span>Ligue</span><b>${KP.LEAGUES[p.league] || p.league}</b><span>Note</span><b>${p.rating}</b><span>Rareté</span><b class="rr-${p.rarity}">${KP.RLABEL[p.rarity]}</b><span>Valeur</span><b>🪙 ${fmt(p.value)}</b><span>Exemplaires</span><b>${mine.length}</b></div>
-  <div class="row">${mine.length ? `<button class="btn-p" data-act="marketSellCard" data-pid="${esc(pid)}">🪙 Vendre</button>` : `<button class="btn-o" data-act="wish" data-pid="${esc(pid)}">${wished ? '★ Dans mes souhaits' : '☆ Ajouter aux souhaits'}</button>`}
-  ${dup.length ? `<button class="btn-o" data-act="recycle1" data-id="${dup[0].id}">Recycler un doublon (🪙 ${KP.recycleValue(p)})</button>` : ''}</div>
+  <div class="kv"><span>Poste</span><b>${KP.POS[p.pos] || p.pos}</b><span>Club</span><b>${esc(p.club)}</b><span>Nation</span><b>${countryHTML(p.nation)} ${esc(p.nation)}</b><span>Ligue</span><b>${KP.LEAGUES[p.league] || p.league}</b><span>Note</span><b>${p.rating}</b><span>Rareté</span><b class="rr-${p.rarity}">${KP.RLABEL[p.rarity]}</b><span>Valeur</span><b>${creditIcon} ${fmt(p.value)}</b><span>Exemplaires</span><b>${mine.length}</b></div>
+  <div class="row">${mine.length ? `<button class="btn-p" data-act="marketSellCard" data-pid="${esc(pid)}">${creditIcon} Vendre</button>` : `<button class="btn-o" data-act="wish" data-pid="${esc(pid)}">${wished ? '★ Dans mes souhaits' : '☆ Ajouter aux souhaits'}</button>`}
+  ${dup.length ? `<button class="btn-o" data-act="recycle1" data-id="${dup[0].id}">Recycler un doublon (${creditIcon} ${KP.recycleValue(p)})</button>` : ''}</div>
   ${!mine.length ? '<p class="mono" style="margin-top:14px">Tu ne possèdes pas encore cette carte.</p>' : ''}</div></div>`);
 }
 function settings() {
@@ -335,7 +336,7 @@ function openFlow(packId, useFree) {
   const summary = res => {
     ov.scrollTop = 0; // V48 : toujours afficher le début du résumé, même après de nombreux packs.
     const worth = res.reduce((a, r) => a + r.player.value, 0);
-    ov.innerHTML = `<div class="ov-bar"><span class="ov-title">Résumé</span><button class="x" data-ov="close" aria-label="Fermer">✕</button></div><div class="sum"><h2>Ton tirage</h2><div class="mono">Valeur totale 🪙 ${fmt(worth)}</div><div class="fan">${res.map((r, k) => `<div style="animation-delay:${k * 60}ms">${cardHTML(r.player, { serial: r.card.serial, isNew: r.isNew })}</div>`).join('')}</div><div class="row" style="justify-content:center"><button class="btn-o" data-ov="close">Fermer</button><button class="btn-p" data-ov="again">Rouvrir ce pack</button></div></div>`;
+    ov.innerHTML = `<div class="ov-bar"><span class="ov-title">Résumé</span><button class="x" data-ov="close" aria-label="Fermer">✕</button></div><div class="sum"><h2>Ton tirage</h2><div class="mono">Valeur totale ${creditIcon} ${fmt(worth)}</div><div class="fan">${res.map((r, k) => `<div style="animation-delay:${k * 60}ms">${cardHTML(r.player, { serial: r.card.serial, isNew: r.isNew })}</div>`).join('')}</div><div class="row" style="justify-content:center"><button class="btn-o" data-ov="close">Fermer</button><button class="btn-p" data-ov="again">Rouvrir ce pack</button></div></div>`;
     ov.onclick = e => { const t = e.target.closest('[data-ov]'); if (!t) return; if (t.dataset.ov === 'close') close(); if (t.dataset.ov === 'again') { busy = false; const free = useFree && S().free.count > 0; if (useFree && !free) return close(); stage(); bind(); } };
   };
   const bind = () => {
@@ -354,8 +355,8 @@ const ACT = {
   open: async d => { if(!(await window.KP_authorizeAction?.('packs')))return; const free = !!d.free; if (free && !KP.canAfford(KP.packById(d.id), 1, true)) return toast('Plus de boosters gratuits'); if (!free && !KP.canAfford(KP.packById(d.id), 1, false)) return toast('Pas assez de gemmes'); openFlow(d.id, free); },
   detail: d => detail(d.pid),
   wish: d => { KP.toggleWish(d.pid); detail(d.pid); },
-  recycle1: d => { const r = run(() => KP.recycleCards([d.id])); if (r) { toast(`+${r.gain} 🪙`); closeModal(); render(true); } },
-  recycleAll: () => { const r = KP.recycleCards(KP.duplicates().map(c => c.id)); toast(`${r.n} cartes recyclées · +${fmt(r.gain)} 🪙`); render(true); },
+  recycle1: d => { const r = run(() => KP.recycleCards([d.id])); if (r) { toast(`+${r.gain} crédits`); closeModal(); render(true); } },
+  recycleAll: () => { const r = KP.recycleCards(KP.duplicates().map(c => c.id)); toast(`${r.n} cartes recyclées · +${fmt(r.gain)} crédits`); render(true); },
   fuse: () => { const ids = KP.duplicates().filter(c => KP.BYID[c.pid].rarity === ui.fuse).slice(0, 5).map(c => c.id); const r = run(() => KP.fuse(ids)); if (r) { modal(`<h2 style="font-size:1.8rem;margin-bottom:14px">Fusion réussie</h2><div style="display:grid;place-items:center">${cardHTML(r.player, { cls: 'xl', serial: r.card.serial, isNew: r.isNew })}</div>`); render(true); } },
   sell: d => { if(window.KP_showBanWarning?.('market'))return; const price = +$('#sellPrice').value; if (run(() => KP.listCard(d.id, price)) !== null) { toast('Carte mise en vente'); closeModal(); render(true); } },
   unlist: d => { if(window.KP_showBanWarning?.('market'))return; KP.cancelListing(d.id); toast('Annonce retirée'); render(true); },
@@ -371,10 +372,10 @@ const ACT = {
   lb: d => { ui.lb = d.id; render(true); },
   login: () => { const r = run(() => KP.claimLogin()); if (r) { toast('Récompense récupérée'); render(true); } },
   claim: d => { KP.claimMission(d.id); render(true); },
-  claimAll: () => { const r = KP.claimAll(); toast(`+${r.g} 💎 +${r.c} 🪙`); render(true); },
+  claimAll: () => { const r = KP.claimAll(); toast(`+${r.g} 💎 +${r.c} crédits`); render(true); },
   copy: () => { const i = $('#refLink'); i.select(); (navigator.clipboard ? navigator.clipboard.writeText(i.value) : Promise.reject()).catch(() => document.execCommand('copy')); toast('Lien copié'); },
   resetPlayers: () => { if (!['admin','owner'].includes(window.KP_AUTH?.role)) return toast('Réservé aux administrateurs'); KP.resetPlayers(); toast('Base de démo rechargée'); settings(); render(true); },
-  grant: () => { if (!['admin','owner'].includes(window.KP_AUTH?.role)) return toast('Réservé aux administrateurs'); KP.grant(1000, 1000); toast('+1000 💎 +1000 🪙'); },
+  grant: () => { if (!['admin','owner'].includes(window.KP_AUTH?.role)) return toast('Réservé aux administrateurs'); KP.grant(1000, 1000); toast('+1000 💎 +1000 crédits'); },
   resetAll: () => { if (!['admin','owner'].includes(window.KP_AUTH?.role)) return toast('Réservé aux administrateurs'); if (confirm('Effacer toute ta progression ?')) { KP.reset(); applyTheme(window.KP_AUTH?.theme || 'normal'); closeModal(); render(); toast('Progression réinitialisée'); } },
 };
 document.addEventListener('click', e => {
